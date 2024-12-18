@@ -31,5 +31,20 @@ def add_block():
     blockchain.add_block(data)
     return jsonify({"message": "Block added successfully"}), 201
 
+# Validate the Chain
+@app.route('/validate', methods=["GET"])
+def validate_chain():
+    for i in range(1, len(blockchain.chain)):
+        current_block = blockchain.chain[i]
+        prev_block = blockchain.chain[i-1]
+
+        if current_block.hash != current_block.calculate_hash():
+            return jsonify({"valid": False, "error": "Hash mismatch"}), 400
+        
+        if current_block.previous_hash != prev_block.hash:
+            return jsonify({"valid": False, "error": "Broken chain"}), 400
+    
+    return jsonify({"valid": True}), 200
+
 if __name__ == "__main__":
     app.run(port=5000)
