@@ -3,6 +3,7 @@ from blockchain import Blockchain
 
 # Create Flask App
 app = Flask(__name__)
+port = 5000
 
 # Init blockchain
 blockchain = Blockchain(difficulty=3)
@@ -75,4 +76,4 @@ def get_block(index):
     return jsonify(block_data), 200
 
 if __name__ == "__main__":
-    app.run(port=5000)
+    app.run(port=port)
