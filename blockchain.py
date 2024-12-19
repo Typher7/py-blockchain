@@ -14,9 +14,10 @@ class Block:
         return hashlib.sha256(block_string.encode()).hexdigest()
 
 class Blockchain:
-    def __init__(self, difficulty=4):
+    def __init__(self, difficulty=4, length=1):
         self.chain = [self.create_genesis_block()]
         self.difficulty = difficulty
+        self.length = length
 
     def create_genesis_block(self):
         return Block(0, "0", "Genesis Block")
@@ -26,6 +27,7 @@ class Blockchain:
         new_block = Block(len(self.chain), last_block.hash, data)
         self.mine_block(new_block)
         self.chain.append(new_block)
+        self.length += 1
 
     def mine_block(self, block):
         while not block.hash.startswith("0" * self.difficulty):
