@@ -1,9 +1,9 @@
 from flask import Flask, jsonify, request
 from blockchain import Blockchain
-
+import os
 # Create Flask App
 app = Flask(__name__)
-port = 5000
+port = int(os.getenv('PORT', 5000))
 
 # Init blockchain
 blockchain = Blockchain(difficulty=3)
@@ -76,4 +76,4 @@ def get_block(index):
     return jsonify(block_data), 200
 
 if __name__ == "__main__":
-    app.run(port=port)
+    app.run(host='0.0.0.0', port=port)
