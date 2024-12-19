@@ -3,6 +3,7 @@ from blockchain import Blockchain
 
 # Create Flask App
 app = Flask(__name__)
+app.run(host='0.0.0.0', port=5000)
 
 # Init blockchain
 blockchain = Blockchain(difficulty=6)
