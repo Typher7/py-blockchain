@@ -76,4 +76,5 @@ def get_block(index):
     return jsonify(block_data), 200
 
 if __name__ == "__main__":
+    blockchain.load_chain()
     app.run(host='0.0.0.0', port=port)

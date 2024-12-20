@@ -28,6 +28,7 @@ class Blockchain:
         self.mine_block(new_block)
         self.chain.append(new_block)
         self.length += 1
+        self.save__chain()
 
     def mine_block(self, block):
         while not block.hash.startswith("0" * self.difficulty):
