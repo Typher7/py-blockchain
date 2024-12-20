@@ -1,4 +1,4 @@
-import hashlib, time
+import hashlib, time, json
 
 class Block:
     def __init__(self, index, previous_hash, data, timestamp=None, nonce=0):
@@ -34,3 +34,16 @@ class Blockchain:
             block.nonce += 1
             block.hash = block.calculate_hash()
         print(f"Block mined: {block.hash}")
+    
+    def save__chain(self):
+        with open('chain.json', 'w') as file:
+            json.dump([block.__dict__ for block in self.chain], file)
+    
+    def load_chain(self):
+        try:
+            with open('chain.json', 'r') as file:
+                chain_data = json.load(file)
+                self.chain = [Block(**block) for block in chain_data]
+        except FileNotFoundError:
+            self.chain = [self.create_genesis_block()]
+    
