@@ -81,14 +81,23 @@ class Blockchain:
                 "previous_hash": block.previous_hash,
                 "data": block.data,
                 "signature": base64.b64encode(block.signature).decode('utf-8') if block.signature else '',
-                "timestamp": block.timestamp
+                "timestamp": block.timestamp,
+                "nonce": block.nonce
             } for block in self.chain], file)
     
     def load_chain(self):
         try:
             with open('chain.json', 'r') as file:
                 chain_data = json.load(file)
-                self.chain = [Block(**block) for block in chain_data]
+                self.chain = []
+                for block_data in chain_data:
+                    block = Block(
+                    index = block_data['index'],
+                    timestamp = block_data['timestamp'],
+                    data = block_data['data'],
+                    previous_hash = block_data['previous_hash'],
+                    nonce = block_data['nonce']
+                    )
         except FileNotFoundError:
             self.chain = [self.create_genesis_block()]
     
