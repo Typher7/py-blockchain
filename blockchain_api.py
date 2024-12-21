@@ -1,6 +1,9 @@
 from flask import Flask, jsonify, request
 from blockchain import Blockchain
 import os
+from cryptography.hazmat.primitives import serialization
+
+
 # Create Flask App
 app = Flask(__name__)
 port = int(os.getenv('PORT', 5000))
@@ -23,6 +26,7 @@ def get_chain():
         })
     return jsonify({"length": blockchain.length, "chain": chain_data}), 200
 
+
 # Add a new block
 @app.route('/add_block', methods=['POST'])
 def add_block():
@@ -31,6 +35,23 @@ def add_block():
         return jsonify({"error": "Data is required"}), 400
     blockchain.add_block(data)
     return jsonify({"message": "Block added successfully"}), 201
+
+
+# Add a transaction
+@app.route('/add_transaction', methods=['POST'])
+def add_transaction():
+    values = request.get_json()
+    require_fields = ['data', 'private_key']
+    if not all(field in values for field in require_fields):
+        return "Missing fields", 400
+    
+    private_key = serialization.load_pem_private_key(
+        values['private_key'].encode(),
+        password=None
+    )
+    blockchain.add_block(values['data'], private_key)
+    return jsonify({"message": "Transaction added"}), 200
+
 
 # Add n blocks
 @app.route('/add_blocks/<int:n>', methods=['POST'])
@@ -44,7 +65,7 @@ def add_blocks(n):
     return jsonify({"message": "Blocks added successfully"}), 201
 
 # Validate the Chain
-@app.route('/validate', methods=["GET"])
+@app.route('/validate_hashes', methods=["GET"])
 def validate_chain():
     for i in range(1, blockchain.length):
         current_block = blockchain.chain[i]
@@ -57,6 +78,18 @@ def validate_chain():
             return jsonify({"valid": False, "error": "Broken chain"}), 400
     
     return jsonify({"valid": True}), 200
+
+#Validate the Blockchain
+@app.route('/validate_keys', methods=['POST'])
+def validate():
+    values = request.get_json()
+    required_fields = ['public_key']
+    if not all(field in values for field in required_fields):
+        return "Missing fields", 400
+    
+    public_key = serialization.load_pem_public_key(values['public_key'].encode())
+    is_valid = blockchain.validate_chain(public_key)
+    return jsonify({"valid": is_valid}), 200
 
 # Query block by index
 @app.route('/block/<int:index>', methods=['GET'])
