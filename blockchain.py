@@ -46,6 +46,7 @@ class Block:
 class Blockchain:
     def __init__(self, difficulty=4, length=1):
         self.chain = [self.create_genesis_block()]
+        self.save_chain()
         self.difficulty = difficulty
         self.length = length
 
