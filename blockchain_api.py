@@ -80,7 +80,7 @@ def add_transactions():
             }), 400
     
     return jsonify({
-        "message": "Successfully added {successful_blocks}",
+        "message": f"Successfully added {successful_blocks}",
         "total_attempted": len(values['data'])
                     }), 201
 
