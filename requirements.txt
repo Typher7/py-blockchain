@@ -6,10 +6,12 @@ attrs==24.3.0
 bitarray==3.0.0
 blinker==1.9.0
 certifi==2024.12.14
+cffi==1.17.1
 charset-normalizer==3.4.0
 ckzg==2.0.1
 click==8.1.7
 colorama==0.4.6
+cryptography==44.0.0
 cytoolz==1.0.1
 eth-account==0.13.4
 eth-hash==0.7.0
@@ -31,10 +33,12 @@ multidict==6.1.0
 packaging==24.2
 parsimonious==0.10.0
 propcache==0.2.1
+pycparser==2.22
 pycryptodome==3.21.0
 pydantic==2.10.3
 pydantic_core==2.27.1
 pyunormalize==16.0.0
+pywin32==308
 regex==2024.11.6
 requests==2.32.3
 rlp==4.0.1
