@@ -27,15 +27,6 @@ def get_chain():
     return jsonify({"length": blockchain.length, "chain": chain_data}), 200
 
 
-# Add a new block
-@app.route('/add_block', methods=['POST'])
-def add_block():
-    data = request.get_json().get("data")
-    if not data:
-        return jsonify({"error": "Data is required"}), 400
-    blockchain.add_block(data)
-    return jsonify({"message": "Block added successfully"}), 201
-
 
 # Add a transaction
 @app.route('/add_transaction', methods=['POST'])
@@ -53,16 +44,45 @@ def add_transaction():
     return jsonify({"message": "Transaction added"}), 200
 
 
-# Add n blocks
-@app.route('/add_blocks/<int:n>', methods=['POST'])
-def add_blocks(n):
-    data = request.get_json().get("data")
-    if not data:
-        return jsonify({"error": "Data is required"}), 400
-    for i in range(n):
-        blockchain.add_block(data[i])
+# Add n transactions
+@app.route('/add_transactions', methods=['POST'])
+def add_transactions():
+    values = request.get_json()
 
-    return jsonify({"message": "Blocks added successfully"}), 201
+    # Check for required fields
+    required_fields = ['data', 'private_key']
+    if not all(field in values for field in required_fields):
+        return jsonify({"error": "Missing required fields: 'data' and 'private_key'"}), 400
+    
+    # Ensure data is a non-empty list
+    if not isinstance(values['data'], list) or not values['data']:
+        return jsonify({"error": "Field 'data' must be a non-empty list."}), 400
+    
+    try:
+        private_key = serialization.load_pem_private_key(
+            values['private_key'].encode(),
+            password=None
+        )
+    except ValueError:
+        return jsonify({"error": "Invalid private key format"}), 400
+    
+    # Process each transaction
+    successful_blocks = 0
+    for data in values['data']:
+        try:
+            blockchain.add_block(data, private_key)
+            successful_blocks += 1
+        except Exception as e:
+            return jsonify({
+                "error": f"Failed to add block for data: {data}",
+                "exception": str(e),
+                "successful_blocks": successful_blocks
+            }), 400
+    
+    return jsonify({
+        "message": "Successfully added {successful_blocks}",
+        "total_attempted": len(values['data'])
+                    }), 201
 
 # Validate the Chain
 @app.route('/validate_hashes', methods=["GET"])
