@@ -2,10 +2,11 @@ from flask import Flask, jsonify, request
 from blockchain import Blockchain
 import os
 from cryptography.hazmat.primitives import serialization
-
+from flask_cors import CORS
 
 # Create Flask App
 app = Flask(__name__)
+CORS(app)
 port = int(os.getenv('PORT', 5000))
 
 # Init blockchain
