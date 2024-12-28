@@ -68,7 +68,7 @@ This project implements a simple blockchain system in Python, paired with a Reac
    i.e port 5000 on localhost
 
 ### Frontend
-1. Navigate to the `Frontend` directory.
+1. Navigate to the `Frontend/Blockchain-UI` directory.
 2. Install dependencies:
    ```bash
    npm install

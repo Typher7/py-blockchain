@@ -1,3 +1,6 @@
 [submodule "FrontEnd/Blockchain-UI"]
 	path = FrontEnd/Blockchain-UI
 	url = https://github.com/Typher7/Blockchain-UI.git
+[submodule "FrontEnd/Blockchain"]
+	path = FrontEnd/Blockchain
+	url = https://github.com/Typher7/Blockchain-UI.git
