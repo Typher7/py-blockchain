@@ -73,6 +73,7 @@ This project implements a simple blockchain system in Python, paired with a Reac
    ```bash
    npm install
    ```
+   run "npm install --legacy-peer-deps" to bypass strict peer dependency conflicts
 3. Start the development server:
    ```bash
    npm run start
